@@ -3,6 +3,7 @@ package com.youth.banner.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.lang.reflect.Field;
@@ -47,13 +48,13 @@ public class BannerViewPager extends ViewPager {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        // 解决recycleview嵌套banner时  动画异常
+        // 解决recycleview嵌套banner时  view被回收后,再次进入banner,动画效果不显示的问题
         try {
             Field mFirstLayout = ViewPager.class.getDeclaredField("mFirstLayout");
             mFirstLayout.setAccessible(true);
             mFirstLayout.set(this, false);
-            getAdapter().notifyDataSetChanged();
-            setCurrentItem(getCurrentItem());
+//          getAdapter().notifyDataSetChanged();
+            setCurrentItem(getCurrentItem(),false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,8 +63,18 @@ public class BannerViewPager extends ViewPager {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+        //解决recycleview嵌套banner时,动画被强制停止导致,ui错位的问题
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BannerViewPager.super.onDetachedFromWindow();
+            }
+        },3000);
+
+
     }
+
+
 
 
 

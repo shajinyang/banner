@@ -633,4 +633,10 @@ public class Banner extends FrameLayout implements OnPageChangeListener {
     public void releaseBanner() {
         handler.removeCallbacksAndMessages(null);
     }
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+    }
 }

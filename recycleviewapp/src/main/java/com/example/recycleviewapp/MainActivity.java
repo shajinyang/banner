@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 20;
+            return 40;
         }
 
         @Override
